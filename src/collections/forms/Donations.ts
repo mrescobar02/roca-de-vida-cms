@@ -101,6 +101,19 @@ export const Donations: CollectionConfig = {
       },
     },
 
+    // ── Referencia de orden — enlace entre nuestro registro y el webhook ──
+    {
+      name: "orderNumber",
+      type: "text",
+      label: "Número de orden",
+      unique: true,
+      index: true,
+      admin: {
+        description: "Generado antes de redirigir a Tilopay (ej. RDV-1717612345678).",
+        readOnly: true,
+      },
+    },
+
     // ── IDs de Tilopay (solo super-admin) ─────────────────────────────────
     {
       name: "tilopayTransactionId",
