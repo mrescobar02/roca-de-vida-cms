@@ -37,5 +37,27 @@ export const DonationSettings: GlobalConfig = {
         { name: "accountNumber", type: "text", label: "Número de cuenta (si aplica)" },
       ],
     },
+    {
+      name: "yappy",
+      type: "group",
+      label: "Yappy",
+      fields: [
+        { name: "handle", type: "text", label: "Usuario Yappy (ej: @rocadevidapanama)" },
+        { name: "accountHolder", type: "text", label: "Titular de la cuenta" },
+        { name: "qrCode", type: "upload", relationTo: "media", label: "Código QR de Yappy" },
+      ],
+    },
+    {
+      name: "bankTransfer",
+      type: "group",
+      label: "Transferencia bancaria",
+      fields: [
+        { name: "bankName", type: "text", label: "Banco" },
+        { name: "accountNumber", type: "text", label: "Número de cuenta" },
+        { name: "accountHolder", type: "text", label: "Titular" },
+        { name: "ruc", type: "text", label: "RUC" },
+        { name: "email", type: "email", label: "Email para comprobantes" },
+      ],
+    },
   ],
 };

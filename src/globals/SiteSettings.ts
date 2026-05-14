@@ -22,6 +22,7 @@ export const SiteSettings: GlobalConfig = {
         { name: "email", type: "email", label: "Email principal" },
         { name: "address", type: "textarea", label: "Dirección" },
         { name: "googleMapsUrl", type: "text", label: "URL de Google Maps" },
+        { name: "whatsappUrl", type: "text", label: "URL de WhatsApp (ej: https://wa.me/50760000000)" },
       ],
     },
     {
