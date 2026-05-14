@@ -23,6 +23,7 @@ import { BaptismRequests } from './collections/forms/BaptismRequests'
 import { MinistryInterests } from './collections/forms/MinistryInterests'
 import { CellGroupRequests } from './collections/forms/CellGroupRequests'
 import { CounselingRequests } from './collections/forms/CounselingRequests'
+import { Donations } from './collections/forms/Donations'
 
 // Globals
 import { SiteSettings } from './globals/SiteSettings'
@@ -63,6 +64,7 @@ export default buildConfig({
     MinistryInterests,
     CellGroupRequests,
     CounselingRequests,
+    Donations,
   ],
 
   globals: [SiteSettings, Navigation, DonationSettings, LiveStreamSettings],
