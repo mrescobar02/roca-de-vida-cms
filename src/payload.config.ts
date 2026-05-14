@@ -81,9 +81,15 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
 
-  cors: [process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000', 'http://localhost:3000'],
+  cors: [
+    process.env.PAYLOAD_URL || 'http://localhost:3001',
+    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+  ].filter(Boolean) as string[],
 
-  csrf: [process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000', 'http://localhost:3000'],
+  csrf: [
+    process.env.PAYLOAD_URL || 'http://localhost:3001',
+    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+  ].filter(Boolean) as string[],
 
   upload: {
     limits: {
