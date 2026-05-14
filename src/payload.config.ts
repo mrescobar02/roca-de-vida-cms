@@ -34,6 +34,12 @@ import { LiveStreamSettings } from './globals/LiveStreamSettings'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+function requireEnv(name: string): string {
+  const val = process.env[name];
+  if (!val) throw new Error(`Missing required environment variable: ${name}`);
+  return val;
+}
+
 export default buildConfig({
   serverURL: process.env.PAYLOAD_URL || 'http://localhost:3001',
 
@@ -73,11 +79,11 @@ export default buildConfig({
 
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || '',
+      connectionString: requireEnv('DATABASE_URI'),
     },
   }),
 
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: requireEnv('PAYLOAD_SECRET'),
 
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),

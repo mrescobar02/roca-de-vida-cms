@@ -1,7 +1,7 @@
 import type { CollectionAfterChangeHook, GlobalAfterChangeHook } from "payload";
 
 const FRONTEND_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-const REVALIDATE_SECRET = process.env.REVALIDATE_SECRET || "";
+const REVALIDATE_SECRET = process.env.REVALIDATE_SECRET;
 
 const COLLECTION_PATHS: Record<string, string[]> = {
   sermons: ["/media/sermones", "/"],
@@ -15,6 +15,11 @@ const COLLECTION_PATHS: Record<string, string[]> = {
 };
 
 export const revalidateCollection: CollectionAfterChangeHook = async ({ doc, collection }) => {
+  if (!REVALIDATE_SECRET) {
+    console.warn("[revalidate] REVALIDATE_SECRET not configured — skipping cache revalidation");
+    return doc;
+  }
+
   const paths = COLLECTION_PATHS[collection.slug];
   if (!paths) return doc;
 
@@ -32,7 +37,6 @@ export const revalidateCollection: CollectionAfterChangeHook = async ({ doc, col
         body: JSON.stringify({ path }),
       });
     } catch (err) {
-      // Non-blocking — log but don't fail the CMS operation
       console.warn(`[revalidate] Failed to revalidate ${path}:`, err);
     }
   }
@@ -41,6 +45,11 @@ export const revalidateCollection: CollectionAfterChangeHook = async ({ doc, col
 };
 
 export const revalidateGlobal: GlobalAfterChangeHook = async ({ doc, global }) => {
+  if (!REVALIDATE_SECRET) {
+    console.warn("[revalidate] REVALIDATE_SECRET not configured — skipping cache revalidation");
+    return doc;
+  }
+
   const globalPaths: Record<string, string[]> = {
     "site-settings": ["/"],
     navigation: ["/"],

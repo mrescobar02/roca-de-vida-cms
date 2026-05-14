@@ -52,6 +52,18 @@ export const Events: CollectionConfig = {
       name: "registrationUrl",
       type: "text",
       label: "URL de registro (externo, opcional)",
+      validate: (url: string | null | undefined) => {
+        if (!url) return true;
+        try {
+          const parsed = new URL(url);
+          if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+            return "La URL debe comenzar con http:// o https://";
+          }
+          return true;
+        } catch {
+          return "URL inválida";
+        }
+      },
     },
     {
       name: "isFeatured",

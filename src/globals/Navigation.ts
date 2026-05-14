@@ -1,5 +1,19 @@
 import type { GlobalConfig } from "payload";
 
+function validateUrl(url: string | null | undefined): true | string {
+  if (!url) return true;
+  if (url.startsWith("/")) return true;
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+      return "La URL debe ser relativa (/ruta) o comenzar con http:// o https://";
+    }
+    return true;
+  } catch {
+    return "URL inválida";
+  }
+}
+
 export const Navigation: GlobalConfig = {
   slug: "navigation",
   label: "Navegación",
@@ -15,14 +29,14 @@ export const Navigation: GlobalConfig = {
       label: "Links del header",
       fields: [
         { name: "label", type: "text", required: true, label: "Texto del link" },
-        { name: "url", type: "text", required: true, label: "URL" },
+        { name: "url", type: "text", required: true, label: "URL", validate: validateUrl },
         {
           name: "children",
           type: "array",
           label: "Sublinks (dropdown)",
           fields: [
             { name: "label", type: "text", required: true },
-            { name: "url", type: "text", required: true },
+            { name: "url", type: "text", required: true, validate: validateUrl },
           ],
         },
       ],
@@ -33,7 +47,7 @@ export const Navigation: GlobalConfig = {
       label: "Botón CTA del header",
       fields: [
         { name: "label", type: "text", defaultValue: "Visítanos", label: "Texto" },
-        { name: "url", type: "text", label: "URL" },
+        { name: "url", type: "text", label: "URL", validate: validateUrl },
       ],
     },
     {
@@ -48,7 +62,7 @@ export const Navigation: GlobalConfig = {
           label: "Links",
           fields: [
             { name: "label", type: "text", required: true },
-            { name: "url", type: "text", required: true },
+            { name: "url", type: "text", required: true, validate: validateUrl },
           ],
         },
       ],

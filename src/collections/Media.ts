@@ -11,7 +11,8 @@ export const Media: CollectionConfig = {
     read: () => true,
   },
   upload: {
-    mimeTypes: ["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"],
+    // SVG excluded — can contain JavaScript (XSS risk)
+    mimeTypes: ["image/jpeg", "image/png", "image/webp", "image/gif"],
     imageSizes: [
       { name: "thumbnail", width: 400, height: 300, position: "centre" },
       { name: "card", width: 800, height: 600, position: "centre" },

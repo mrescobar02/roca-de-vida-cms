@@ -1,4 +1,6 @@
 import type { CollectionConfig } from "payload";
+import { NAME_MAX, PHONE_MAX, MESSAGE_MAX, NOTES_MAX } from "../../fields/formValidators";
+import { hasPermission } from "../../lib/permissions";
 
 export const CounselingRequests: CollectionConfig = {
   slug: "counseling-requests",
@@ -10,28 +12,27 @@ export const CounselingRequests: CollectionConfig = {
     description: "Acceso restringido — solo equipo pastoral",
   },
   access: {
-    // Máxima restricción — solo super-admin ve consejería
-    read: ({ req }) => req.user?.role === "super-admin",
+    read:   ({ req }) => req.user?.role === "super-admin" || hasPermission(req.user, "counseling-requests", "canRead"),
     create: () => true,
-    update: ({ req }) => req.user?.role === "super-admin",
-    delete: ({ req }) => req.user?.role === "super-admin",
+    update: ({ req }) => req.user?.role === "super-admin" || hasPermission(req.user, "counseling-requests", "canUpdate"),
+    delete: ({ req }) => req.user?.role === "super-admin" || hasPermission(req.user, "counseling-requests", "canDelete"),
   },
   fields: [
-    { name: "name", type: "text", required: true, label: "Nombre completo" },
+    { name: "name",  type: "text",  required: true, label: "Nombre completo", maxLength: NAME_MAX },
     { name: "email", type: "email", required: true, label: "Email" },
-    { name: "phone", type: "text", required: true, label: "Teléfono" },
+    { name: "phone", type: "text",  required: true, label: "Teléfono",        maxLength: PHONE_MAX },
     {
       name: "category",
       type: "select",
       label: "Área de consejería",
       options: [
-        { label: "Matrimonio / Pareja", value: "marriage" },
-        { label: "Familia", value: "family" },
-        { label: "Adicciones", value: "addictions" },
-        { label: "Duelo / Pérdida", value: "grief" },
-        { label: "Salud emocional / Depresión", value: "mental-health" },
-        { label: "Espiritual", value: "spiritual" },
-        { label: "Otro", value: "other" },
+        { label: "Matrimonio / Pareja",          value: "marriage"      },
+        { label: "Familia",                      value: "family"        },
+        { label: "Adicciones",                   value: "addictions"    },
+        { label: "Duelo / Pérdida",              value: "grief"         },
+        { label: "Salud emocional / Depresión",  value: "mental-health" },
+        { label: "Espiritual",                   value: "spiritual"     },
+        { label: "Otro",                         value: "other"         },
       ],
     },
     {
@@ -39,28 +40,28 @@ export const CounselingRequests: CollectionConfig = {
       type: "select",
       label: "Preferencia de contacto",
       options: [
-        { label: "Llamada telefónica", value: "phone" },
-        { label: "WhatsApp", value: "whatsapp" },
-        { label: "Email", value: "email" },
-        { label: "Presencial", value: "in-person" },
+        { label: "Llamada telefónica", value: "phone"     },
+        { label: "WhatsApp",           value: "whatsapp"  },
+        { label: "Email",              value: "email"     },
+        { label: "Presencial",         value: "in-person" },
       ],
     },
-    { name: "message", type: "textarea", required: true, label: "Cuéntanos brevemente tu situación" },
+    { name: "message", type: "textarea", required: true, label: "Cuéntanos brevemente tu situación", maxLength: MESSAGE_MAX },
     {
       name: "status",
       type: "select",
       defaultValue: "new",
       label: "Estado",
       options: [
-        { label: "Nueva", value: "new" },
-        { label: "Contactado", value: "contacted" },
-        { label: "En proceso", value: "in-progress" },
-        { label: "Cerrado", value: "closed" },
-        { label: "Archivado", value: "archived" },
+        { label: "Nueva",        value: "new"         },
+        { label: "Contactado",   value: "contacted"   },
+        { label: "En proceso",   value: "in-progress" },
+        { label: "Cerrado",      value: "closed"      },
+        { label: "Archivado",    value: "archived"    },
       ],
       admin: { position: "sidebar" },
     },
-    { name: "notes", type: "textarea", label: "Notas internas (solo pastoral)" },
+    { name: "notes", type: "textarea", label: "Notas internas (solo pastoral)", maxLength: NOTES_MAX },
   ],
   timestamps: true,
 };

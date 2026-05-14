@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload";
+import { hasPermission } from "../../lib/permissions";
 
 export const Donations: CollectionConfig = {
   slug: "donations",
@@ -10,10 +11,10 @@ export const Donations: CollectionConfig = {
     description: "Registro de donaciones y suscripciones recurrentes.",
   },
   access: {
-    read:   ({ req }) => req.user?.role === "super-admin" || req.user?.role === "editor",
+    read:   ({ req }) => req.user?.role === "super-admin" || req.user?.role === "editor" || hasPermission(req.user, "donations", "canRead"),
     create: () => true,          // el webhook de Tilopay crea registros sin auth de usuario
-    update: ({ req }) => req.user?.role === "super-admin" || req.user?.role === "editor",
-    delete: ({ req }) => req.user?.role === "super-admin",
+    update: ({ req }) => req.user?.role === "super-admin" || req.user?.role === "editor" || hasPermission(req.user, "donations", "canUpdate"),
+    delete: ({ req }) => req.user?.role === "super-admin" || hasPermission(req.user, "donations", "canDelete"),
   },
   fields: [
     // ── Datos del donante ──────────────────────────────────────────────────
@@ -36,7 +37,7 @@ export const Donations: CollectionConfig = {
     {
       type: "row",
       fields: [
-        { name: "amount",   type: "number", label: "Monto",   required: true, min: 0.01, admin: { width: "40%" } },
+        { name: "amount",   type: "number", label: "Monto",   required: true, min: 0.01, max: 10000, admin: { width: "40%" } },
         {
           name: "currency",
           type: "select",
